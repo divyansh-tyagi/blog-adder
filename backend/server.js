@@ -13,7 +13,11 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://blog-adder-r4jf63onn-divyansh-tyagis-projects-6efe02c7.vercel.app', // Updated to allow requests from the Vercel frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
