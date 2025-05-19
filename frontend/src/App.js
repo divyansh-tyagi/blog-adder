@@ -3,16 +3,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Components
 import Navbar from './components/Navbar';
 
+// Pages
 import Home from './pages/Home';
 import BlogEditor from './pages/BlogEditor';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 
+// Context
 import { AuthProvider } from './context/AuthContext';
 
+// Styles
 import './styles/App.css';
 import './styles/enhanced.css';
 import './styles/enhanced.css';

@@ -6,13 +6,16 @@ import AuthContext from '../context/AuthContext';
 import { debounce } from '../utils/helpers';
 import Spinner from '../components/Spinner';
 
+// Helper function to safely parse tags
 const parseTagsFromString = (tagsString) => {
   if (!tagsString) return [];
+  // Split by comma, trim whitespace, and filter out empty tags
   return tagsString.split(',')
     .map(tag => tag.trim())
     .filter(tag => tag.length > 0);
 };
 
+// Helper function to format tags for display
 const formatTagsForDisplay = (tagsArray) => {
   if (!tagsArray || !Array.isArray(tagsArray) || tagsArray.length === 0) return '';
   return tagsArray.join(', ');
@@ -23,6 +26,7 @@ const BlogEditor = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);
   
+  // State for the blog
   const [blog, setBlog] = useState({
     title: '',
     content: '',
@@ -30,41 +34,52 @@ const BlogEditor = () => {
     status: 'draft'
   });
   
+  // UI states
   const [loading, setLoading] = useState(id ? true : false);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   
+  // Destructure blog values
   const { title, content, tags } = blog;
   
+  // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
     }
   }, [isAuthenticated, navigate]);
   
+  // Fetch blog if editing existing one
   useEffect(() => {
     if (id) {
       const fetchBlog = async () => {
         try {
           const res = await BlogService.getBlogById(id);
           
+          // Check the exact structure of the response
           console.log('Blog response data structure:', res);
           
+          // Determine the correct data structure based on the response
           let blogData;
           if (res.data && res.data.data) {
+            // If nested data structure
             blogData = res.data.data;
           } else if (res.data) {
+            // If direct data object
             blogData = res.data;
           } else if (res.success && res.data) {
+            // If success property at root level
             blogData = res.data;
           } else {
+            // Fallback
             console.error('Unexpected response format:', res);
             blogData = res;
           }
           
           console.log('Extracted blog data:', blogData);
           
+          // Format tags from array to comma-separated string using our helper
           setBlog({
             ...blogData,
             tags: formatTagsForDisplay(blogData.tags || [])
@@ -75,24 +90,29 @@ const BlogEditor = () => {
           console.error('Error fetching blog:', error);
           console.error('Error response:', error.response);
           
+          // Provide detailed error message based on the error
           let errorMessage = 'Failed to load blog';
           
           if (error.response) {
-            
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
             if (error.response.status === 404) {
               errorMessage = 'Blog not found. It may have been deleted.';
             } else if (error.response.status === 401) {
               errorMessage = 'You need to be logged in to view this blog';
+              // Redirect to login
               setTimeout(() => navigate('/login'), 2000);
             } else if (error.response.data && error.response.data.message) {
               errorMessage = error.response.data.message;
             }
           } else if (error.request) {
+            // The request was made but no response was received
             errorMessage = 'Network error. Please check your connection.';
           }
           
           toast.error(errorMessage);
           
+          // Only navigate away for certain errors
           if (error.response && error.response.status !== 401) {
             navigate('/');
           }
@@ -139,11 +159,14 @@ const BlogEditor = () => {
       } catch (error) {
         console.error('Auto-save error:', error);
         
+        // Provide more specific error message based on error type
         let errorMessage = 'Auto-save failed';
         
         if (error.response) {
+          // Server responded with an error status
           if (error.response.status === 401) {
             errorMessage = 'Session expired. Please login again';
+            // Redirect to login after a short delay
             setTimeout(() => navigate('/login'), 3000);
           } else if (error.response.status === 400) {
             errorMessage = 'Validation error. Check your content';
@@ -151,11 +174,13 @@ const BlogEditor = () => {
             errorMessage = 'Server error. Try again later';
           }
         } else if (error.request) {
+          // Request made but no response received
           errorMessage = 'Network error. Check your connection';
         }
         
         setAutoSaveStatus(errorMessage);
         
+        // Clear the status message after 3 seconds
         setTimeout(() => {
           setAutoSaveStatus('');
         }, 3000);
@@ -164,6 +189,7 @@ const BlogEditor = () => {
     [id, navigate]
   );
   
+  // Handle form input changes
   const onChange = (e) => {
     const { name, value } = e.target;
     
@@ -172,11 +198,12 @@ const BlogEditor = () => {
       [name]: value
     });
     
+    // Trigger auto-save when user makes changes
     autoSaveBlog({
       ...blog,
       [name]: value
     });
-  };      
+  };      // Handle manual save as draft
   const saveDraft = async () => {
     if (!title && !content) {
       toast.error('Please add a title or content');
@@ -197,14 +224,16 @@ const BlogEditor = () => {
         id: id || null,
         title,
         content,
-        tags: parseTagsFromString(tags)  
+        tags: parseTagsFromString(tags) // Use our helper to parse tags properly
       });
       
       console.log('Save draft response:', res);
       
       toast.success('Draft saved successfully');
       
+      // If this is a new blog, redirect to the edit page
       if (!id) {
+        // Extract ID from response based on structure
         const blogId = res.data?._id || res.data?.data?._id || res._id;
         if (blogId) {
           navigate(`/editor/${blogId}`);
@@ -222,6 +251,7 @@ const BlogEditor = () => {
     }
   };
   
+  // Handle publish
   const publishBlog = async () => {
     if (!title) {
       toast.error('Title is required');
@@ -240,7 +270,7 @@ const BlogEditor = () => {
         id: id || null,
         title,
         content,
-        tags: parseTagsFromString(tags) 
+        tags: parseTagsFromString(tags) // Use our helper to parse tags properly
       });
       
       toast.success('Blog published successfully');

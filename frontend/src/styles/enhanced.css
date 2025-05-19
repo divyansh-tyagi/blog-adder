@@ -1,3 +1,4 @@
+/* Additional animations and effects */
 .scale-in {
   animation: scaleIn 0.4s ease forwards;
 }
@@ -13,6 +14,7 @@
   }
 }
 
+/* Enhanced Blog Editor Styles */
 .editor-container {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -28,6 +30,7 @@
   }
 }
 
+/* Login/Register Form Styles */
 .auth-form {
   max-width: 450px;
   margin: 0 auto;
@@ -60,6 +63,7 @@
   font-weight: 600;
 }
 
+/* Button with icon */
 .btn-with-icon {
   display: flex;
   align-items: center;
@@ -67,6 +71,7 @@
   gap: 0.5rem;
 }
 
+/* Tag styling */
 .tag-container {
   display: flex;
   flex-wrap: wrap;
@@ -103,6 +108,7 @@
   color: white;
 }
 
+/* Save indicator */
 .save-indicator {
   display: flex;
   align-items: center;
@@ -116,6 +122,7 @@
   font-weight: 500;
 }
 
+/* Empty state */
 .empty-state {
   text-align: center;
   padding: 3rem 1.5rem;
@@ -144,12 +151,14 @@
   color: var(--primary-color);
 }
 
+/* Additional UI enhancements */
 .save-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -169,10 +178,12 @@
   background: var(--dark-gray);
 }
 
+/* Focus styles */
 :focus {
   outline: none;
 }
 
+/* Page transitions */
 .page-transition {
   transition: opacity 0.3s, transform 0.3s;
 }
@@ -197,6 +208,7 @@
   transform: translateY(-10px);
 }
 
+/* Add a nice gradient to the page header */
 .header-gradient {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   color: white;
@@ -216,6 +228,7 @@
   font-size: 1.1rem;
 }
 
+/* Card hover effects */
 .hover-lift {
   transition: transform 0.3s, box-shadow 0.3s;
 }

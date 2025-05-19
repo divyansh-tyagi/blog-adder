@@ -14,6 +14,7 @@ const Login = () => {
   const { login, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   
+  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');

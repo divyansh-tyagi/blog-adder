@@ -9,16 +9,19 @@ const BlogCard = ({ blog, onDelete }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);
   
+  // Function to truncate content
   const truncateContent = (content, maxLength = 150) => {
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength) + '...';
   };
 
+  // Handle blog deletion
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
         await BlogService.deleteBlog(blog._id);
         toast.success('Blog deleted successfully');
+        // If onDelete prop exists, call it to refresh the parent component
         if (onDelete) {
           onDelete(blog._id);
         }

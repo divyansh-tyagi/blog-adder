@@ -1,6 +1,8 @@
 import axiosInstance from './axiosConfig';
 
+// Blog API service
 const BlogService = {
+  // Get all blogs
   getAllBlogs: async () => {
     try {
       const response = await axiosInstance.get('/blogs');
@@ -11,6 +13,7 @@ const BlogService = {
     }
   },
 
+  // Get a blog by ID
   getBlogById: async (id) => {
     try {
       const response = await axiosInstance.get(`/blogs/${id}`);
@@ -21,6 +24,7 @@ const BlogService = {
     }
   },
 
+  // Save or update a draft
   saveDraft: async (blogData) => {
     try {
       const response = await axiosInstance.post('/blogs/draft', blogData);
@@ -31,6 +35,7 @@ const BlogService = {
     }
   },
 
+  // Publish a blog
   publishBlog: async (blogData) => {
     try {
       const response = await axiosInstance.post('/blogs/publish', blogData);
@@ -41,6 +46,7 @@ const BlogService = {
     }
   },
 
+  // Delete a blog
   deleteBlog: async (id) => {
     try {
       const response = await axiosInstance.delete(`/blogs/${id}`);

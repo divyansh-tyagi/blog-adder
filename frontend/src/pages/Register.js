@@ -16,39 +16,46 @@ const Register = () => {
   const { register, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   
+  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
   }, [isAuthenticated, navigate]);
   
+  // Validate form fields
   const validateForm = () => {
     const newErrors = {};
     
+    // Username validation
     if (!username.trim()) {
       newErrors.username = 'Username is required';
     } else if (username.length < 3) {
       newErrors.username = 'Username must be at least 3 characters';
     }
     
+    // Email validation
     if (!email) {
       newErrors.email = 'Email is required';
     } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       newErrors.email = 'Please enter a valid email address';
     }
     
+    // Password validation
     if (!password) {
       newErrors.password = 'Password is required';
     } else if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
     
+    // Confirm password validation
     if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
     
     setErrors(newErrors);
     
+    // Return true if no errors (form is valid)
     return Object.keys(newErrors).length === 0;
   };
   

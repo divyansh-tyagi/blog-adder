@@ -14,6 +14,7 @@ const Home = () => {
   const [searching, setSearching] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
 
+  // Fetch all blogs
   const fetchBlogs = async () => {
     try {
       setLoading(true);
@@ -29,17 +30,22 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // Fetch all blogs on component mount
     fetchBlogs();
   }, []);
 
+  // Handle blog deletion
   const handleDeleteBlog = (blogId) => {
+    // Filter out the deleted blog from both arrays
     const updatedBlogs = blogs.filter(blog => blog._id !== blogId);
     setBlogs(updatedBlogs);
     setFilteredBlogs(updatedBlogs);
   };
 
+  // Handle search
   const handleSearch = (searchTerm) => {
     if (!searchTerm.trim()) {
+      // If search is empty, show all blogs
       setFilteredBlogs(blogs);
       setSearching(false);
       return;
@@ -48,6 +54,7 @@ const Home = () => {
     setSearching(true);
     const term = searchTerm.toLowerCase();
     
+    // Filter blogs by title, content, or tags
     const results = blogs.filter(blog => 
       blog.title.toLowerCase().includes(term) || 
       blog.content.toLowerCase().includes(term) || 
@@ -57,6 +64,7 @@ const Home = () => {
     setFilteredBlogs(results);
   };
 
+  // Filter blogs by status
   const publishedBlogs = filteredBlogs.filter(blog => blog.status === 'published');
   const draftBlogs = filteredBlogs.filter(blog => blog.status === 'draft');
 
