@@ -1,3 +1,5 @@
+Deployed working link: https://blog-adder.vercel.app
+Backend deployed link: https://blog-adder.onrender.com
 # Blog Adder App
 
 ## Overview
