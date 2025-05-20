@@ -14,9 +14,9 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://blog-adder-r4jf63onn-divyansh-tyagis-projects-6efe02c7.vercel.app', // Updated to allow requests from the Vercel frontend
+  origin: '*', // Allow requests from any origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: false // Disable credentials since origin is '*'
 }));
 
 app.use('/api/auth', authRoutes);
